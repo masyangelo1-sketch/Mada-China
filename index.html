@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="mg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123c35">
+<title>MadaImport Manager</title>
+<style>
+:root{--green:#123c35;--mint:#e6f4ee;--gold:#eab85a;--ink:#172b27;--muted:#65746f;--line:#e1e9e5;--bg:#f5f8f6;--white:#fff;--red:#b54747}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--green);color:white;padding:22px 16px 26px;border-radius:0 0 22px 22px}
+.top{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.brand{font-size:21px;font-weight:800;letter-spacing:.2px}.tag{font-size:12px;opacity:.8;margin-top:4px}.badge{border:1px solid #ffffff55;border-radius:999px;padding:7px 10px;font-size:12px;white-space:nowrap}
+main{max-width:1100px;margin:18px auto;padding:0 14px 40px}
+nav{display:flex;gap:8px;overflow:auto;padding:2px 0 14px}
+nav button{border:1px solid var(--line);background:white;border-radius:999px;padding:10px 14px;white-space:nowrap;font-weight:650;color:var(--ink);cursor:pointer}
+nav button.active{background:var(--green);color:white;border-color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 3px 12px #123c3508}
+.metric-label{font-size:12px;color:var(--muted);margin-bottom:8px}.metric{font-size:clamp(19px,3vw,26px);font-weight:800;overflow-wrap:anywhere}.sub{font-size:12px;color:var(--muted);margin-top:6px}
+.panel{margin-top:14px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.panel h2{font-size:18px;margin:0}
+button,.button{cursor:pointer}.primary{background:var(--green);color:white;border:0;border-radius:10px;padding:11px 14px;font-weight:700}.secondary{background:white;color:var(--green);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-weight:650}.danger{background:#fff0f0;color:var(--red);border:1px solid #f1d1d1;border-radius:9px;padding:7px 10px}
+form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+label{display:block;font-size:12px;color:var(--muted);font-weight:650;margin-bottom:5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d6e1db;border-radius:10px;background:#fff;font:inherit;color:var(--ink);min-width:0}
+.full{grid-column:1/-1}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px;min-width:600px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line)}th{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}
+.empty{text-align:center;color:var(--muted);padding:25px 10px;font-size:14px}
+.hidden{display:none!important}.note{background:#fff8e8;border:1px solid #f1dfb6;padding:12px;border-radius:12px;font-size:13px;line-height:1.5;margin-top:14px}
+.small{font-size:12px;color:var(--muted);line-height:1.5}.section-title{margin:18px 0 10px;font-size:16px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:720px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{font-size:21px}.top{align-items:flex-start}.badge{font-size:11px}form{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<header><div class="top"><div><div class="brand">🇨🇳 MadaImport Manager 🇲🇬</div><div class="tag">Fitantanana ny fanafarana sy varotrao</div></div><div class="badge">Vola: Ariary (Ar)</div></div></header>
+<main>
+<nav id="nav">
+<button class="active" data-tab="dashboard">📊 Tabilao</button>
+<button data-tab="products">📦 Entana</button>
+<button data-tab="imports">🚢 Fanafarana</button>
+<button data-tab="sales">🛍️ Varotra</button>
+<button data-tab="expenses">🧾 Fandaniana</button>
+</nav>
+<section id="dashboard">
+<div class="grid">
+<div class="card"><div class="metric-label">Renivola napetraka</div><div class="metric" id="capital">100 000 Ar</div><div class="sub">Ovay ao amin'ny toe-javatra etsy ambany</div></div>
+<div class="card"><div class="metric-label">Vola azo tamin'ny varotra</div><div class="metric" id="revenue">0 Ar</div><div class="sub">Fitambaran'ny varotra voarakitra</div></div>
+<div class="card"><div class="metric-label">Fandaniana voarakitra</div><div class="metric" id="expenseTotal">0 Ar</div><div class="sub">Fividianana sy sarany</div></div>
+<div class="card"><div class="metric-label">Tombony / fatiantoka tombanana</div><div class="metric" id="profit">0 Ar</div><div class="sub">Varotra − fandaniana voarakitra</div></div>
+</div>
+<div class="card panel">
+<div class="panel-head"><h2>Famintinana ny tahiry</h2><button class="secondary" onclick="showTab('products')">Jereo ny entana</button></div>
+<div class="grid">
+<div><div class="metric-label">Karazana entana</div><div class="metric" id="productCount">0</div></div>
+<div><div class="metric-label">Isan'ny entana anaty tahiry</div><div class="metric" id="stockCount">0</div></div>
+<div><div class="metric-label">Fanafarana misokatra</div><div class="metric" id="importCount">0</div></div>
+<div><div class="metric-label">Varotra voarakitra</div><div class="metric" id="saleCount">0</div></div>
+</div></div>
+<div class="card panel">
+<div class="panel-head"><h2>Toe-javatra</h2></div>
+<label for="capitalInput">Renivola voalohany (Ar)</label><div class="actions"><input id="capitalInput" type="number" min="0" step="1" value="100000" style="max-width:220px"><button class="primary" id="saveCapital">Tehirizo</button></div>
+<p class="small">Kajy fanampiana fotsiny ity fampiharana ity. Ampidiro ao amin'ny fandaniana ny vidin'ny entana, fitaterana, douane ary sarany hafa mba hahazoana tombana akaiky kokoa.</p>
+</div>
+<div class="note"><strong>Fiarovana ny angona:</strong> voatahiry amin'ity navigateur sy fitaovana ity ihany ny angona. Tsy misy kaonty na kopia an-tserasera. Aza fafana ny angon'ny navigateur raha tsy efa nanao export.</div>
+</section>
+
+<section id="products" class="hidden">
+<div class="card">
+<div class="panel-head"><h2>Manampy entana</h2></div>
+<form id="productForm">
+<div><label>Anaran'ny entana</label><input name="name" required placeholder="Ohatra: Support téléphone"></div>
+<div><label>Sokajy</label><select name="category"><option>Accessoires téléphone</option><option>Kojakoja an-trano</option><option>Akanjo sy accessoires</option><option>Hafa</option></select></div>
+<div><label>Vidin'ny iray (Ar)</label><input name="cost" type="number" min="0" required placeholder="0"></div>
+<div><label>Vidiny amidy (Ar)</label><input name="price" type="number" min="0" required placeholder="0"></div>
+<div><label>Isan'ny tahiry</label><input name="stock" type="number" min="0" step="1" required value="0"></div>
+<div><label>Rohy Pinduoduo (raha misy)</label><input name="link" type="url" placeholder="https://..."></div>
+<div class="full actions"><button class="primary">+ Tehirizo ny entana</button></div>
+</form></div>
+<div class="card panel"><div class="panel-head"><h2>Lisitr'ireo entana</h2><button class="secondary" onclick="exportData()">Export data</button></div><div class="table-wrap"><table><thead><tr><th>Entana</th><th>Sokajy</th><th>Vidin'ny iray</th><th>Vidiny amidy</th><th>Tahiry</th><th>Tombony/iray*</th><th>Hetsika</th></tr></thead><tbody id="productsRows"></tbody></table></div><div id="productsEmpty" class="empty">Tsy mbola misy entana. Ampio etsy ambony.</div><p class="small">*Tombony/iray alohan'ny fitaterana sy sarany hafa.</p></div>
+</section>
+
+<section id="imports" class="hidden">
+<div class="card"><div class="panel-head"><h2>Manoratra fanafarana</h2></div>
+<form id="importForm">
+<div><label>Kaody / anaran'ny commande</label><input name="name" required placeholder="Ohatra: commande #1"></div>
+<div><label>Mpamatsy / mpanelanelana</label><input name="supplier" placeholder="Anarana"></div>
+<div><label>Vola naloa tamin'ny entana (Ar)</label><input name="goods" type="number" min="0" value="0" required></div>
+<div><label>Fitaterana (Ar)</label><input name="shipping" type="number" min="0" value="0" required></div>
+<div><label>Douane sy sarany hafa (Ar)</label><input name="fees" type="number" min="0" value="0" required></div>
+<div><label>Sata</label><select name="status"><option>Miandry fividianana</option><option>Novidina tany Chine</option><option>En transit</option><option>Tonga eto Madagasikara</option><option>Vita</option></select></div>
+<div class="full"><label>Fanamarihana</label><input name="notes" placeholder="Daty, tracking, entana..."></div>
+<div class="full"><button class="primary">+ Tehirizo ny fanafarana</button></div>
+</form></div>
+<div class="card panel"><div class="panel-head"><h2>Tantaran'ny fanafarana</h2></div><div class="table-wrap"><table><thead><tr><th>Commande</th><th>Mpanome</th><th>Entana</th><th>Fitaterana</th><th>Sarany hafa</th><th>Fitambarany</th><th>Sata</th><th>Hetsika</th></tr></thead><tbody id="importsRows"></tbody></table></div><div id="importsEmpty" class="empty">Tsy mbola misy fanafarana voarakitra.</div></div>
+</section>
+
+<section id="sales" class="hidden">
+<div class="card"><div class="panel-head"><h2>Manoratra varotra</h2></div>
+<form id="saleForm">
+<div><label>Entana</label><select name="productId" id="saleProduct" required><option value="">Safidio ny entana</option></select></div>
+<div><label>Isan'ny amidy</label><input name="qty" type="number" min="1" step="1" value="1" required></div>
+<div><label>Vidin'ny iray (Ar)</label><input name="price" id="salePrice" type="number" min="0" required></div>
+<div><label>Mpanjifa (tsy voatery)</label><input name="customer" placeholder="Anarana / laharana"></div>
+<div><label>Fomba fandoavana</label><select name="payment"><option>MVola</option><option>Orange Money</option><option>Airtel Money</option><option>Vola mivantana</option><option>Hafa</option></select></div>
+<div><label>Sata fandoavana</label><select name="paid"><option>Voaloa</option><option>Mbola tsy voaloa</option></select></div>
+<div class="full"><button class="primary">+ Tehirizo ny varotra</button></div>
+</form></div>
+<div class="card panel"><div class="panel-head"><h2>Tantaran'ny varotra</h2></div><div class="table-wrap"><table><thead><tr><th>Daty</th><th>Entana</th><th>Isany</th><th>Fitambarany</th><th>Fandoavana</th><th>Sata</th><th>Hetsika</th></tr></thead><tbody id="salesRows"></tbody></table></div><div id="salesEmpty" class="empty">Tsy mbola misy varotra voarakitra.</div></div>
+</section>
+
+<section id="expenses" class="hidden">
+<div class="card"><div class="panel-head"><h2>Manampy fandaniana</h2></div>
+<form id="expenseForm">
+<div><label>Antony</label><input name="name" required placeholder="Ohatra: frais de livraison"></div>
+<div><label>Sokajy</label><select name="category"><option>Fividianana entana</option><option>Fitaterana</option><option>Douane</option><option>Fonosana</option><option>Internet / communication</option><option>Hafa</option></select></div>
+<div><label>Vola (Ar)</label><input name="amount" type="number" min="0" required></div>
+<div><label>Fomba fandoavana</label><select name="payment"><option>MVola</option><option>Orange Money</option><option>Airtel Money</option><option>Vola mivantana</option><option>Hafa</option></select></div>
+<div class="full"><button class="primary">+ Tehirizo ny fandaniana</button></div>
+</form></div>
+<div class="card panel"><div class="panel-head"><h2>Tantaran'ny fandaniana</h2></div><div class="table-wrap"><table><thead><tr><th>Daty</th><th>Antony</th><th>Sokajy</th><th>Vola</th><th>Fandoavana</th><th>Hetsika</th></tr></thead><tbody id="expensesRows"></tbody></table></div><div id="expensesEmpty" class="empty">Tsy mbola misy fandaniana voarakitra.</div></div>
+</section>
+<footer>MadaImport Manager • Kinova voalohany • Tehirizo matetika ny export-nao.</footer>
+</main>
+<script>
+const KEY='madaimport_manager_v1';
+let state={capital:100000,products:[],imports:[],sales:[],expenses:[]};
+try{const saved=localStorage.getItem(KEY);if(saved)state={...state,...JSON.parse(saved)}}catch(e){}
+const money=n=>new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(Number(n)||0)+' Ar';
+const dateNow=()=>new Date().toLocaleDateString('fr-FR');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const save=()=>{localStorage.setItem(KEY,JSON.stringify(state));render()};
+function showTab(tab){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==tab));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+document.getElementById('saveCapital').addEventListener('click',()=>{state.capital=Math.max(0,Number(document.getElementById('capitalInput').value)||0);save()});
+document.getElementById('productForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);state.products.push({id:crypto.randomUUID(),name:f.get('name').trim(),category:f.get('category'),cost:+f.get('cost'),price:+f.get('price'),stock:+f.get('stock'),link:f.get('link')});e.target.reset();save()});
+document.getElementById('saleProduct').addEventListener('change',e=>{const p=state.products.find(x=>x.id===e.target.value);if(p)document.getElementById('salePrice').value=p.price});
+document.getElementById('saleForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target),p=state.products.find(x=>x.id===f.get('productId')),qty=+f.get('qty');if(!p)return alert('Misafidiana entana.');if(p.stock<qty)return alert('Tsy ampy ny tahiry.');p.stock-=qty;state.sales.unshift({id:crypto.randomUUID(),date:dateNow(),productId:p.id,name:p.name,qty,price:+f.get('price'),customer:f.get('customer'),payment:f.get('payment'),paid:f.get('paid')});e.target.reset();save()});
+document.getElementById('importForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);state.imports.unshift({id:crypto.randomUUID(),name:f.get('name'),supplier:f.get('supplier'),goods:+f.get('goods'),shipping:+f.get('shipping'),fees:+f.get('fees'),status:f.get('status'),notes:f.get('notes'),date:dateNow()});e.target.reset();save()});
+document.getElementById('expenseForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);state.expenses.unshift({id:crypto.randomUUID(),date:dateNow(),name:f.get('name'),category:f.get('category'),amount:+f.get('amount'),payment:f.get('payment')});e.target.reset();save()});
+function del(kind,id){if(!confirm('Hofafana ity firaketana ity?'))return;state[kind]=state[kind].filter(x=>x.id!==id);save()}
+function render(){
+ document.getElementById('capital').textContent=money(state.capital);document.getElementById('capitalInput').value=state.capital;
+ const revenue=state.sales.reduce((a,s)=>a+s.qty*s.price,0);
+ const expenses=state.expenses.reduce((a,x)=>a+x.amount,0)+state.imports.reduce((a,x)=>a+x.goods+x.shipping+x.fees,0);
+ document.getElementById('revenue').textContent=money(revenue);document.getElementById('expenseTotal').textContent=money(expenses);const pr=document.getElementById('profit');pr.textContent=money(revenue-expenses);pr.style.color=revenue-expenses<0?'#b54747':'#123c35';
+ document.getElementById('productCount').textContent=state.products.length;document.getElementById('stockCount').textContent=state.products.reduce((a,p)=>a+p.stock,0);document.getElementById('importCount').textContent=state.imports.filter(x=>!['Vita','Tonga eto Madagasikara'].includes(x.status)).length;document.getElementById('saleCount').textContent=state.sales.length;
+ document.getElementById('productsRows').innerHTML=state.products.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.category)}</td><td>${money(p.cost)}</td><td>${money(p.price)}</td><td>${p.stock}</td><td>${money(p.price-p.cost)}</td><td><button class="danger" onclick="del('products','${p.id}')">Fafao</button></td></tr>`).join('');
+ document.getElementById('productsEmpty').classList.toggle('hidden',state.products.length>0);
+ const sel=document.getElementById('saleProduct'),old=sel.value;sel.innerHTML='<option value="">Safidio ny entana</option>'+state.products.map(p=>`<option value="${p.id}">${esc(p.name)} (${p.stock} sisa)</option>`).join('');if(state.products.some(p=>p.id===old))sel.value=old;
+ document.getElementById('importsRows').innerHTML=state.imports.map(x=>`<tr><td>${esc(x.name)}<div class="small">${esc(x.date)} ${esc(x.notes||'')}</div></td><td>${esc(x.supplier||'—')}</td><td>${money(x.goods)}</td><td>${money(x.shipping)}</td><td>${money(x.fees)}</td><td><strong>${money(x.goods+x.shipping+x.fees)}</strong></td><td>${esc(x.status)}</td><td><button class="danger" onclick="del('imports','${x.id}')">Fafao</button></td></tr>`).join('');
+ document.getElementById('importsEmpty').classList.toggle('hidden',state.imports.length>0);
+ document.getElementById('salesRows').innerHTML=state.sales.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.name)}<div class="small">${esc(x.customer||'')}</div></td><td>${x.qty}</td><td>${money(x.qty*x.price)}</td><td>${esc(x.payment)}</td><td>${esc(x.paid)}</td><td><button class="danger" onclick="del('sales','${x.id}')">Fafao</button></td></tr>`).join('');
+ document.getElementById('salesEmpty').classList.toggle('hidden',state.sales.length>0);
+ document.getElementById('expensesRows').innerHTML=state.expenses.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.category)}</td><td>${money(x.amount)}</td><td>${esc(x.payment)}</td><td><button class="danger" onclick="del('expenses','${x.id}')">Fafao</button></td></tr>`).join('');
+ document.getElementById('expensesEmpty').classList.toggle('hidden',state.expenses.length>0);
+}
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='madaimport-backup.json';a.click();URL.revokeObjectURL(a.href)}
+render();
+</script>
+</body>
+</html>
